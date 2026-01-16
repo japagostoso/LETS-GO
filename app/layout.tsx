@@ -38,6 +38,19 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-K5LKB17BDD" strategy="afterInteractive" />
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-K5LKB17BDD', { send_page_view: true });
+            `,
+          }}
+        />
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)

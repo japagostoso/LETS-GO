@@ -4,6 +4,7 @@ import { Download, Play, ArrowLeft, Wrench } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { headingNow } from "./fonts"
+import { trackEvent } from "@/lib/analytics"
 
 const VIDEO_URL = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Vls%20On%202-CstJqg1suVb6nbagY29HvwGXGmqs1g.mp4"
 const APK_URL = encodeURI("/images/ASpy.apk")
@@ -35,6 +36,7 @@ export default function VideoPage() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const secondVideoRef = useRef<HTMLVideoElement>(null)
   const downloadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const videoSentRef = useRef({ 25: false, 50: false, 75: false })
 
   useEffect(() => {
     if (typeof window !== "undefined" && (window as any).fbq) {
@@ -47,6 +49,23 @@ export default function VideoPage() {
   const handleTimeUpdate = () => {
     if (videoRef.current && videoRef.current.currentTime >= 27 && !showPhoneOptions) {
       setShowPhoneOptions(true)
+    }
+
+    const video = videoRef.current
+    if (!video || !video.duration) return
+
+    const percent = (video.currentTime / video.duration) * 100
+    if (percent >= 25 && !videoSentRef.current[25]) {
+      trackEvent("video_25")
+      videoSentRef.current[25] = true
+    }
+    if (percent >= 50 && !videoSentRef.current[50]) {
+      trackEvent("video_50")
+      videoSentRef.current[50] = true
+    }
+    if (percent >= 75 && !videoSentRef.current[75]) {
+      trackEvent("video_75")
+      videoSentRef.current[75] = true
     }
   }
 
@@ -190,6 +209,7 @@ export default function VideoPage() {
                 if (typeof window !== "undefined" && (window as any).fbq) {
                   ;(window as any).fbq("track", "Lead")
                 }
+                trackEvent("download_apk")
               }}
               className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors animate-pulse"
             >
@@ -243,6 +263,7 @@ export default function VideoPage() {
             onPlay={handleVideoPlay}
             onPause={handleVideoPause}
             onTimeUpdate={handleTimeUpdate}
+            onEnded={() => trackEvent("video_complete")}
           >
             <source src={VIDEO_URL} type="video/mp4" />
             Seu navegador não suporta a reprodução de vídeo.
