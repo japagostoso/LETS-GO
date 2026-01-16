@@ -183,6 +183,11 @@ export default function VideoPage() {
             <a
               href={APK_URL}
               download="ASpy.apk"
+              onClick={() => {
+                if (typeof window !== "undefined" && (window as any).fbq) {
+                  ;(window as any).fbq("track", "Lead")
+                }
+              }}
               className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors animate-pulse"
             >
               <Download className="w-5 h-5" />
