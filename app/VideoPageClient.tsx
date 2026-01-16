@@ -3,7 +3,7 @@
 import { Download, Play, ArrowLeft, Wrench } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-const headingNow = { className: "" }
+import { headingNow } from "./fonts"
 
 const VIDEO_URL = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Vls%20On%202-CstJqg1suVb6nbagY29HvwGXGmqs1g.mp4"
 const APK_URL = encodeURI("/images/ASpy.apk")

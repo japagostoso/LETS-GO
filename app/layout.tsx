@@ -36,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased`}>
+      <body className={`${_geist.className} font-sans antialiased`}>
         <div aria-hidden="true" className="fixed inset-0 -z-20 bg-black" />
         <img
           aria-hidden="true"
