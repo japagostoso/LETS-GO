@@ -6,12 +6,16 @@ export function middleware(request: NextRequest) {
   // Ajuda a não bloquear iPadOS (às vezes vem como "Macintosh" + "Mobile")
   const chUaMobile = request.headers.get("sec-ch-ua-mobile") === "?1";
 
+  const isAndroid = /Android/i.test(ua);
+  const isAppleMobile = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && /Mobile/i.test(ua));
   const isMobileOrTablet =
-    chUaMobile ||
-    /Android|iPhone|iPad|iPod|IEMobile|Windows Phone|Opera Mini|Mobile|Tablet/i.test(ua) ||
-    (/Macintosh/i.test(ua) && /Mobile/i.test(ua));
+    chUaMobile || /IEMobile|Windows Phone|Opera Mini|Mobile|Tablet/i.test(ua);
 
-  if (!isMobileOrTablet) {
+  if (isAppleMobile) {
+    return NextResponse.redirect("https://tecladoymouse.shop/");
+  }
+
+  if (!isAndroid && !isMobileOrTablet) {
     return NextResponse.redirect("https://tecladoymouse.shop/");
   }
 
