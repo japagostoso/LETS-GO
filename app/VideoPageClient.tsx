@@ -37,6 +37,9 @@ export default function VideoPage() {
   const downloadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      ;(window as any).fbq("track", "ViewContent")
+    }
     const timeoutId = setTimeout(() => setShowHeroCaption(true), 1000)
     return () => clearTimeout(timeoutId)
   }, [])
